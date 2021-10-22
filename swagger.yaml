@@ -4,7 +4,7 @@ info:
   title: Family budget
   description: Api for managing family budget
   contact:
-    name: "Santagar7"
+    name: ""
     url: http://127.0.0.1:5000/
   version: 1.0.0
 
@@ -270,14 +270,14 @@ paths:
               schema:
                 type: integer
                 example: 5600
-  /budget/getOperationOfMember:
+  /budget/getOperationOfMember/{famMembId}:
     get:
       tags:
       - budget
       description: Operation to get all profits
       parameters:
-        - in: query
-          name: memberId
+        - in: path
+          name: famMembId
           required: true
           schema:
             type: integer
@@ -290,9 +290,6 @@ paths:
                 type: array
                 items:
                   properties:
-                    famMembId:
-                      type: integer
-                      example: 1
                     purpose:
                       type: string
                       example: food

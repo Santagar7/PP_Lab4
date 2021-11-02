@@ -17,6 +17,18 @@ class family(BaseModel):
     __tablename__ = 'family'
 
     id = Column(Integer, primary_key=True)
+    name = Column(VARCHAR(30))
+
+    def __str__(self):
+        return f"id       : {self.id}\n" \
+               f"name: {self.name}\n"
+
+
+class family_members(BaseModel):
+    __tablename__ = 'family_members'
+
+    id = Column(Integer, primary_key=True)
+    familyId = Column(Integer, ForeignKey(family.id))
     firstname = Column(VARCHAR(30))
     lastname = Column(VARCHAR(30))
     role = Column(VARCHAR(30))
@@ -34,7 +46,7 @@ class costs(BaseModel):
     __tablename__ = 'costs'
 
     id = Column(Integer, primary_key=True)
-    familyMemId = Column(Integer, ForeignKey(family.id))
+    familyMemId = Column(Integer, ForeignKey(family_members.id))
     purpose = Column(VARCHAR(45))
     amount = Column(Integer)
     time = Column(DateTime)
@@ -51,7 +63,7 @@ class profits(BaseModel):
     __tablename__ = 'profits'
 
     id = Column(Integer, primary_key=True)
-    familyMemId = Column(Integer, ForeignKey(family.id))
+    familyMemId = Column(Integer, ForeignKey(family_members.id))
     amount = Column(Integer)
     time = Column(DateTime)
 

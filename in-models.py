@@ -1,26 +1,30 @@
-from models import Session, family, costs, profits
+from models import *
 
 session = Session()
 
-MEMBER_1 = family(id=1, firstname='John', lastname='Smith', role='Father', age=40)
+FAMILY_1 = family(name='Smiths')
 
-MEMBER_2 = family(id=2, firstname='Katherine', lastname='Smith', role='Mother', age=35)
+MEMBER_1 = family_members(familyId=1, firstname='John', lastname='Smith', role='Father', age=40)
 
-MEMBER_3 = family(id=3, firstname='Andrew', lastname='Smith', role='Son', age=10)
+MEMBER_2 = family_members(familyId=1, firstname='Katherine', lastname='Smith', role='Mother', age=35)
+
+MEMBER_3 = family_members(familyId=1, firstname='Andrew', lastname='Smith', role='Son', age=10)
+
+COST_1 = costs(familyMemId=1, purpose='Car repair', amount=300)
+
+COST_2 = costs(familyMemId=2, purpose='New phone', amount=500)
+
+COST_3 = costs(familyMemId=3, purpose='Book', amount=20)
+
+PROFIT_1 = profits(familyMemId=1, amount=3400)
+
+PROFIT_2 = profits(familyMemId=2, amount=1500)
+
+PROFIT_3 = profits(familyMemId=3, amount=50)
 
 
-COST_1 = costs(id=1, familyMemId=1, purpose='Car repair', amount=300)
-
-COST_2 = costs(id=2, familyMemId=2, purpose='New phone', amount=500)
-
-COST_3 = costs(id=3, familyMemId=3, purpose='Book', amount=20)
-
-PROFIT_1 = profits(id=1, familyMemId=1, amount=3400)
-
-PROFIT_2 = profits(id=2, familyMemId=2, amount=1500)
-
-PROFIT_3 = profits(id=3, familyMemId=3, amount=50)
-
+session.add(FAMILY_1)
+session.commit()
 session.add(MEMBER_1)
 session.add(MEMBER_2)
 session.add(MEMBER_3)

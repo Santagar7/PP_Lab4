@@ -1,0 +1,30 @@
+FAMILY
+{
+"name": "aishsaf"
+}
+
+FAMILY_MEMBERS
+{
+"login": "jasbdhajsh"
+"password": "sdfasdf"
+"familyId": 1
+"firstname": "sdfsdf"
+"lastname": "sdfsd"
+"role": "sdjf"
+"birthdate": "1954-11-11"
+}
+
+COSTS
+{
+"familyMemId": 1
+"familyId": 2
+"purpose": "lsdkasf"
+"amount": 123.123
+}
+
+PROFITS
+{
+"familyMemId": 1
+"familyId": 2
+"amount": 123.123
+}

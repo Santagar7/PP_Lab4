@@ -12,12 +12,193 @@ servers:
   - url: http://127.0.0.1:5000
 
 tags:
+- name: family
+  description: List of all families
 - name: family_members
   description: List of all family members
-- name: budget
-  description: Operations with family budget
+- name: costs
+  description: Costs
+- name: profits
+  description: Profits
 
 paths:
+  /family:
+    description: All families
+    get:
+      tags:
+      - family
+      description: Operation to get all families
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: Smiths
+                    id:
+                      type: integer
+                      example: 1
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+                    description: update, delete, get specific family
+    post:
+      tags:
+      - family
+      description: Add family
+      parameters:
+        - in: query
+          name: Name
+          required: true
+          schema:
+            type: string
+            example: Jason Smith
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Smiths
+                id:
+                  type: integer
+                  example: 1
+        required: true
+      responses:
+        201:
+          description: Successfully added
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+  /family/{id}:
+    get:
+      tags:
+      - family
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    name:
+                      type: string
+                      example: Smiths
+                    id:
+                      type: integer
+                      example: 1
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+    put:
+      tags:
+      - family
+      description: Update info
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Smiths
+                id:
+                  type: integer
+                  example: 1
+        required: true
+      responses:
+        201:
+          description: Successfully updated
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+    delete:
+      tags:
+      - family
+      description: Delete family from system
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Successfully deleted
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
   /family_members:
     description: All family members
     get:
@@ -207,77 +388,14 @@ paths:
                   message:
                     type: string
                     example: "Invalid request"
-
-  /budget/getCosts:
+  /costs/{famMemId}:
     get:
       tags:
-      - budget
-      description: Operation to get all costs
-      responses:
-        200:
-          description: Success Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    famMembId:
-                      type: integer
-                      example: 1
-                    purpose:
-                      type: string
-                      example: food
-                    amount:
-                      type: integer
-                      example: 100
-                    operationId:
-                      type: integer
-                      example: 1
-  /budget/getProfits:
-    get:
-      tags:
-      - budget
-      description: Operation to get all profits
-      responses:
-        200:
-          description: Success Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    famMembId:
-                      type: integer
-                      example: 1
-                    amount:
-                      type: integer
-                      example: 100
-                    operationId:
-                      type: integer
-                      example: 1
-  /budget/getAmount:
-    get:
-      tags:
-      - budget
-      description: Operation to get total amount
-      responses:
-        200:
-          description: Success Response
-          content:
-            application/json:
-              schema:
-                type: integer
-                example: 5600
-  /budget/getOperationOfMember/{famMembId}:
-    get:
-      tags:
-      - budget
+      - costs
       description: Operation to get all profits
       parameters:
         - in: path
-          name: famMembId
+          name: famMemId
           required: true
           schema:
             type: integer
@@ -299,14 +417,101 @@ paths:
                     operationId:
                       type: integer
                       example: 1
-  /budget/{operationId}:
+  /costs/{familyId}:
     get:
       tags:
-      - budget
+      - costs
       description: Operation to get all profits
       parameters:
         - in: path
-          name: operationId
+          name: familyId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    purpose:
+                      type: string
+                      example: food
+                    amount:
+                      type: integer
+                      example: 100
+                    operationId:
+                      type: integer
+                      example: 1
+  /profits/{famMemId}:
+    get:
+      tags:
+      - profits
+      description: Operation to get all profits
+      parameters:
+        - in: path
+          name: famMemId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    purpose:
+                      type: string
+                      example: food
+                    amount:
+                      type: integer
+                      example: 100
+                    operationId:
+                      type: integer
+                      example: 1
+  /profits/{familyId}:
+    get:
+      tags:
+      - profits
+      description: Operation to get all profits
+      parameters:
+        - in: path
+          name: familyId
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    purpose:
+                      type: string
+                      example: food
+                    amount:
+                      type: integer
+                      example: 100
+                    operationId:
+                      type: integer
+                      example: 1
+  /costs/{id}:
+    get:
+      tags:
+      - costs
+      description: Operation to get all profits
+      parameters:
+        - in: path
+          name: id
           required: true
           schema:
             type: integer
@@ -340,10 +545,187 @@ paths:
                   message:
                     type: string
                     example: "Invalid request"
-  /budget/addCost:
+    put:
+      tags:
+      - costs
+      description: Update info
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                famMembId:
+                      type: integer
+                      example: 1
+                purpose:
+                      type: string
+                      example: food
+                amount:
+                      type: integer
+                      example: 100
+        required: true
+      responses:
+        201:
+          description: Successfully updated
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+    delete:
+      tags:
+      - costs
+      description: Delete cost
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Successfully deleted
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+  /profits/{id}:
+    get:
+      tags:
+      - profits
+      description: Operation to get all profits
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    famMembId:
+                      type: integer
+                      example: 1
+                    purpose:
+                      type: string
+                      example: food
+                    amount:
+                      type: integer
+                      example: 100
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+    put:
+      tags:
+      - profits
+      description: Update info
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                famMembId:
+                      type: integer
+                      example: 1
+                purpose:
+                      type: string
+                      example: food
+                amount:
+                      type: integer
+                      example: 100
+        required: true
+      responses:
+        201:
+          description: Successfully updated
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+    delete:
+      tags:
+      - profits
+      description: Delete cost
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        201:
+          description: Successfully deleted
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: "Invalid request"
+  /costs:
     post:
       tags:
-      - budget
+      - costs
       description: Add cost
       parameters:
         - in: query
@@ -393,11 +775,11 @@ paths:
                   message:
                     type: string
                     example: "Invalid request"
-  /budget/addProfit:
+  /profits:
     post:
       tags:
-      - budget
-      description: Add cost
+      - profits
+      description: Add profit
       parameters:
         - in: query
           name: Member ID
